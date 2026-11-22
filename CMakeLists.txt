@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.28.5 FATAL_ERROR)
 
 # Give your project a name. Specify language CXX (for maths, mathplot and your code) and also C (for glad)
-project(mathplot_template LANGUAGES CXX C)
+project(mathplot_config LANGUAGES CXX C)
 
 # mathplot uses c++-20 language features
 set(CMAKE_CXX_STANDARD 20)

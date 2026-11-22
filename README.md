@@ -1,15 +1,6 @@
-# mathplot_template
+# mathplot_config
 
-This example project demonstrates how you
-can write and build a program that uses [mathplot](https://github.com/sebsjames/mathplot).
-
-Really, this project is just one `CMakeLists.txt` file containing the
-commands required to use mathplot and a single target (prog1),
-which compiles the example program `prog1.cpp`.
-
-To make your own program, you could either replace
-prog1.cpp with your own code, or incorporate the relevant parts of the
-CMakeLists.txt file into your own CMakeLists.txt in another project.
+This contains some [mathplot](https://github.com/sebsjames/mathplot) examples which use `sm::config` from [maths_config](https://github.com/sebsjames/maths_config).
 
 ## Dependencies
 
@@ -34,12 +25,8 @@ sudo dnf install cmake libglvnd-devel mesa-libGL-devel glfw-devel freetype-devel
 # Plus install clang20
 ```
 
-I'd love to know the equivalents for other Linux distributions so I
-can include them in the mathplot documentation, so if you know,
-please pull-request them!
-
 If you're building on a Mac, you can refer to the [Mac
-README](https://github.com/sebsjames/mathplot/blob/main/README.build.mac.md#installation-dependencies-for-mac)
+README](https://github.com/sebsjames/mathplot/blob/main/README.build.mac.md#installation-dependencies-for-mac) in mathplot
 for help. You only need to obtain and build
 [glfw3](https://github.com/sebsjames/mathplot/blob/main/README.build.mac.md#glfw3);
 OpenGL and Freetype should already be installed by default.
@@ -50,21 +37,20 @@ To build and run the example:
 
 ```bash
 # Clone this example
-git clone git@github.com:sebsjames/mathplot_template # or your fork of it
+git clone git@github.com:sebsjames/mathplot_config
 
-# Bring in the three submodules - sebsjames/mathplot, sebsjames/maths and nlohmann/json
+# Bring in the submodules - sebsjames/mathplot and sebsjames/maths
 # Your project will need these submodules too. They don't HAVE to be
-# submodules, you can just copy or symlink the three codebases if you
+# submodules, you can just copy or symlink the two codebases if you
 # prefer.
 
-cd mathplot_template # or whatever you named your fork/copy
+cd mathplot_config
 git submodule init
 git submodule update
 
-# Build prog1 in a 'build' directory
+# Build programs in a 'build' directory
 mkdir build
 cd build
 CC=clang-20 CXX=clang++-20 cmake .. -GNinja
 ninja
-./prog1 # You should see a window containing some graphs
 ```
