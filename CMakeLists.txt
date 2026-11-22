@@ -87,6 +87,8 @@ set(MY_MATHPLOT_MODULES
   ${MPLOT_SOURCE_DIR}/mplot/SphereVisual.cppm
   ${MPLOT_SOURCE_DIR}/mplot/VectorVisual.cppm
   ${MPLOT_SOURCE_DIR}/mplot/TriangleVisual.cppm
+  ${MPLOT_SOURCE_DIR}/mplot/HexGridVisual.cppm
+  ${MPLOT_SOURCE_DIR}/mplot/PolygonVisual.cppm
 )
 # De-duplicate the list
 list(REMOVE_DUPLICATES MY_MATHPLOT_MODULES)
