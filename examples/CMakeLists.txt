@@ -1,0 +1,17 @@
+add_executable(graph_logist2 graph_logist2.cpp)
+target_link_libraries(graph_logist2 mathplot_modules)
+
+add_executable(jsonconfig jsonconfig.cpp)
+target_link_libraries(jsonconfig mathplot_modules)
+
+add_executable(triangle_intersect triangle_intersect.cpp)
+target_link_libraries(triangle_intersect mathplot_modules)
+ 
+add_executable(show_boundingboxes show_boundingboxes.cpp)
+target_link_libraries(show_boundingboxes mathplot_modules)
+
+add_executable(izhikevich izhikevich.cpp)
+target_link_libraries(izhikevich mathplot_modules)
+
+add_executable(izhikevich_alt izhikevich_alt.cpp)
+target_link_libraries(izhikevich_alt mathplot_modules)

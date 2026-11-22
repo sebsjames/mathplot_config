@@ -39,10 +39,10 @@ To build and run the example:
 # Clone this example
 git clone git@github.com:sebsjames/mathplot_config
 
-# Bring in the submodules - sebsjames/mathplot and sebsjames/maths
-# Your project will need these submodules too. They don't HAVE to be
-# submodules, you can just copy or symlink the two codebases if you
-# prefer.
+# Bring in the submodules - sebsjames/mathplot, sebsjames/maths,
+# sebsjames/maths_config and nlohmann/json Your project will need
+# these submodules too. They don't HAVE to be submodules, you can just
+# copy or symlink the codebases if you prefer.
 
 cd mathplot_config
 git submodule init

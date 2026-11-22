@@ -30,6 +30,8 @@ find_package(Freetype REQUIRED)
 
 set(MPLOT_SOURCE_DIR "${PROJECT_SOURCE_DIR}/extern/mathplot" CACHE PATH "The path to sebsjames/mathplot")
 set(MATHS_SOURCE_DIR "${PROJECT_SOURCE_DIR}/extern/maths" CACHE PATH "The path to sebsjames/maths")
+set(MATHS_CONFIG_SOURCE_DIR "${PROJECT_SOURCE_DIR}/extern/maths_config" CACHE PATH "The path to sebsjames/maths_config")
+set(JSON_SOURCE_DIR "${PROJECT_SOURCE_DIR}/extern/json" CACHE PATH "The path to nlohmann/json")
 
 #
 # Set compiler flags
@@ -45,13 +47,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMPLOT_FONTS_DIR=\"\\\"${MPLOT_SOURCE_D
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGL3_PROTOTYPES -DGL_GLEXT_PROTOTYPES")
 
 #
-# Include paths for module compilation
-#
-
-# mathplot needs these includes
-include_directories(${OPENGL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${MPLOT_SOURCE_DIR})
-
-#
 # Define lists of module files to build. We pull in some definitions
 # of variables that list the modules in maths and mathplot
 #
@@ -62,7 +57,9 @@ setup_module_variables_for_maths (${MATHS_SOURCE_DIR})
 # Include mathplot module defs by running two macros from sebsjames/mathplot
 include(${MPLOT_SOURCE_DIR}/cmake/module_definitions.cmake)
 setup_module_variables_for_mathplot (${MPLOT_SOURCE_DIR} ${MATHS_SOURCE_DIR})
-
+# maths_config
+include(${MATHS_CONFIG_SOURCE_DIR}/cmake/module_definitions.cmake)
+setup_module_variables_for_maths_config (${MATHS_CONFIG_SOURCE_DIR} ${JSON_SOURCE_DIR} ${MATHS_SOURCE_DIR})
 
 #
 # Compile two 'boilerplate' libraries - glad and the mathplot fontdata
@@ -70,10 +67,12 @@ setup_module_variables_for_mathplot (${MPLOT_SOURCE_DIR} ${MATHS_SOURCE_DIR})
 
 # For mathplot, we must build the glad library here
 add_library(glad STATIC ${MPLOT_SOURCE_DIR}/mplot/glad/gl.c)
+target_include_directories(glad AFTER PRIVATE ${MPLOT_SOURCE_DIR})
 
 # We have to build the mathplot fonts data library - this packs up
 # some TTF fonts into an object file; they're unpacked at runtime.
 add_library(mplot_fontdata STATIC ${MPLOT_SOURCE_DIR}/mplot/VisualFaceAsm.cpp)
+target_include_directories(mplot_fontdata AFTER PRIVATE ${MPLOT_SOURCE_DIR})
 
 #
 # Compile a library with the mathplot features we want
@@ -82,7 +81,12 @@ add_library(mplot_fontdata STATIC ${MPLOT_SOURCE_DIR}/mplot/VisualFaceAsm.cpp)
 # Define a list of the modules we wish to compile into our library
 set(MY_MATHPLOT_MODULES
   ${MPLOT_CORE_MODULES}
-  ${MPLOT_SOURCE_DIR}/mplot/GraphVisual.cppm  # The example uses a GraphVisual
+  ${SM_CONFIG_MODULES}
+  ${MPLOT_SOURCE_DIR}/mplot/GraphVisual.cppm
+  ${MPLOT_SOURCE_DIR}/mplot/RodVisual.cppm
+  ${MPLOT_SOURCE_DIR}/mplot/SphereVisual.cppm
+  ${MPLOT_SOURCE_DIR}/mplot/VectorVisual.cppm
+  ${MPLOT_SOURCE_DIR}/mplot/TriangleVisual.cppm
 )
 # De-duplicate the list
 list(REMOVE_DUPLICATES MY_MATHPLOT_MODULES)
@@ -95,16 +99,12 @@ target_sources(mathplot_modules
 )
 # Link the OpenGL, Freetype and GLFW libraries to this internal library
 target_link_libraries(mathplot_modules OpenGL::GL Freetype::Freetype glfw glad mplot_fontdata)
+set(MATHPLOT_EXAMPLES_INCLUDES
+  ${OPENGL_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS} ${MPLOT_SOURCE_DIR} ${JSON_SOURCE_DIR}/include
+)
+target_include_directories(mathplot_modules AFTER PRIVATE ${MATHPLOT_EXAMPLES_INCLUDES})
 
-#
-# Now it's time to define how we will compile the program prog1
-#
-
-# The sample is compiled from a single c++ file
-add_executable(prog1 prog1.cpp)
-
-# Link our internal library mathplot_modules
-target_link_libraries(prog1 mathplot_modules)
+add_subdirectory(examples)
 
 #
 # All done!
